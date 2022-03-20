@@ -1,6 +1,6 @@
 def add_time(start, duration, day = None):
 
-    dict = {
+    hours_dict = {
         "12AM": 0,
         "1AM": 1,
         "2AM": 2,
@@ -27,9 +27,29 @@ def add_time(start, duration, day = None):
         "11PM": 23,
     }
 
+    days_dict = {
+        "monday": 1,
+        "tuesday": 2,
+        "wednesday": 3,
+        "thursday": 4,
+        "friday": 5,
+        "saturday": 6,
+        "sunday": 7
+    }
+
+    reverse_days_dict = {
+        1: "Monday",
+        2: "Tuesday",
+        3: "Wednesday",
+        4: "Thursday",
+        5: "Friday",
+        6: "Saturday",
+        7: "Sunday"
+    }
+
     # figure out what hour of the day is 
     start_hours = start.split(":")[0] + start.split(" ")[1]
-    start_hours = dict[start_hours]
+    start_hours = hours_dict[start_hours]
     start_minutes = int(start.split(":")[1].split(" ")[0])
 
     # get values to add
@@ -71,13 +91,24 @@ def add_time(start, duration, day = None):
         result = result + " PM"
     else: 
         result = result + " AM"
+
+    # check if day of the week is needed and add to result
+    if day is not None:
+        day_value = days_dict[day.lower()]
+        final_week_day = day_value + final_days
+        if final_week_day <= 7:
+            result = result + ", " + reverse_days_dict[final_week_day]
+        else:
+            while final_week_day > 7:
+                final_week_day = final_week_day - 7
+            result = result + ", " + reverse_days_dict[final_week_day]
     
     #check days and add to result
     if final_days == 1:
         result = result + " (next day)"
     elif final_days > 1:
         result = result + f" ({final_days} days later)"
-        
+    
     return result
 
     
